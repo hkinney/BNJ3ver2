@@ -30,7 +30,7 @@ public class VisualizationController
 	private String		_Header;
 	private ArrayList	_TempEdges;
 	private ArrayList	_ColorLegend;
-	private boolean _DoZoom2Fit;
+	private boolean 	_DoZoom2Fit;
 	
 	/*! query if the vis agent should zoom2fit on this frame
 	 * \return answer

@@ -14,6 +14,7 @@ import edu.ksu.cis.bnj.ver3.core.BeliefNode;
 import edu.ksu.cis.bnj.ver3.core.Discrete;
 import edu.ksu.cis.bnj.ver3.dynamic.DynamicTyping;
 import edu.ksu.cis.bnj.ver3.inference.exact.LS;
+import edu.ksu.cis.bnj.ver3.influence.nrar.VariableElimination;
 import edu.ksu.cis.util.GlobalOptions;
 import edu.ksu.cis.util.graph.core.Edge;
 import edu.ksu.cis.util.graph.core.Graph;
@@ -61,9 +62,28 @@ public class NetworkVisualize extends KDDCanvas implements Visitor
 				header = VC.getHeader();
 			}
 		}
+		//To Visualize Influence Diagram.
+		else if (REN._bn.isInfluenceDiagram())
+		{
+			_Transform = REN._trans;
+			_bn = REN._bn;
+			if(_bn == null) return;
+			VC = new VisualizationController(_bn.getGraph());
+			
+			if (_bn.getGraph().getNumberOfVertices() > 1)
+			{
+				VariableElimination VE = new VariableElimination(_bn);
+				VE.run(); // shall I need a VariableElimination.run(VC)?
+				_frame = VC.getFrame();
+				_markings = VC.getMarkings();
+				codepage = VC.getCode();
+				_active = VC.getActiveLine();
+				header = VC.getHeader();
+			}
+		}
 		else
 		{
-			header = "Unable to visualize Influence Diagrams/Dynamic BN/Empty BN";
+			header = "Unable to visualize Dynamic BN/Empty BN";
 		}
 		ourRedraw();
 	}
