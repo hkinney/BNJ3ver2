@@ -1,40 +1,44 @@
 package edu.ksu.cis.util.graph.visualization.operators;
-import edu.ksu.cis.util.graph.visualization.CodePage;
-import edu.ksu.cis.util.graph.visualization.CodePageOperator;
-import edu.ksu.cis.util.graph.visualization.GraphOperator;
+
+import edu.ksu.cis.bnj.ver3.core.*;
 import edu.ksu.cis.util.GlobalOptions;
-import edu.ksu.cis.util.graph.visualization.*;
-import edu.ksu.cis.util.graph.core.*;
-import edu.ksu.cis.bnj.ver3.core.BeliefNode;
+import edu.ksu.cis.util.graph.core.Graph;
 
-
+/*
+ * File: NodeDeletion.java
+ * File Author: Hayden Kinney
+ */
 
 public class NodeDeletion{
+	// Variables for BeliefNode and Network.
+	private BeliefNode beliefNode;
+	private BeliefNetwork beliefNetwork;
+	
+	//This will create a new NodeDeletion Operator.
+	public NodeDeletion(BeliefNode BelNode)
+	{
+		beliefNode = BelNode;
+	}
+	
+	//Apply a NodeDeletion operator to the beliefNetwork.
+	public BeliefNetwork apply(BeliefNetwork BelNet)
+	{
+		beliefNetwork = BelNet;
+		BelNet.deleteBeliefNode(beliefNode);
+		return beliefNetwork;
+	}
 
-	private BeliefNode node;
-	
-	public NodeDeletion(BeliefNode N)
+	//Undo a NodeDeletion operator to the beliefNetwork.
+	public BeliefNetwork applyInverse(BeliefNetwork BelNet)
 	{
-		node = N;
+		beliefNetwork = BelNet;
+		BelNet.addBeliefNode(beliefNode);
+		return beliefNetwork;
 	}
 	
-	public Graph remove(Graph G)
-	{
-		//G.removeNode(node);
-		return G;
-	}
-	
-	public Graph applyInverse(Graph G)
-	{
-		//G.addNode(node);
-		return G;
-	}
-	
+	//This will pause for the Visualization.
 	public int getTime()
 	{
-		return GlobalOptions.getInstance().getInteger("time_edge_create", 50);
+		return GlobalOptions.getInstance().getInteger("time_node_deletion", 500);
 	}
-	
-	
-	
 }

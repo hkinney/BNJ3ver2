@@ -13,15 +13,19 @@ import edu.ksu.cis.bnj.ver3.influence.Solver;
 import edu.ksu.cis.bnj.ver3.plugin.IOPlugInLoader;
 import edu.ksu.cis.bnj.ver3.streams.Importer;
 import edu.ksu.cis.bnj.ver3.streams.OmniFormatV1_Reader;
+import edu.ksu.cis.util.graph.visualization.VisualizationController;
+import edu.ksu.cis.util.graph.visualization.operators.*;
 
 public class VariableElimination implements Solver
 {
 	private BeliefNetwork _OriginalNetwork;
 	private BeliefNetwork _TransformedNetwork;
+	private VisualizationController _VC;
 	
 	public VariableElimination(BeliefNetwork bn) {
 		_OriginalNetwork = bn;
 		_TransformedNetwork  = bn;
+		_VC = new VisualizationController(bn.getGraph());
 	}
 	
 	public void Show() {
@@ -79,11 +83,12 @@ public class VariableElimination implements Solver
 					if ( children.length == 0) {
 						flag = true;
 						System.out.println("delete barren node:"+node.getName());
-						//delete one barren node here
+						//Delete the barren node...
+						_VC.pushAndApplyOperator(new NodeDeletion(node));
+						//Delete the node from the network.
 						_TransformedNetwork.deleteBeliefNode(node);
 					}
 				}
-		
 			}			
 		}	
 	}
@@ -127,8 +132,10 @@ public class VariableElimination implements Solver
 		
 		for (int i = 0; i < parents_c.length; i++)
 			// connect all parents of chance node c to utility node v
+			
 			_TransformedNetwork.connect(parents_c[i], v);
 		// delete chance node c
+		
 		_TransformedNetwork.deleteBeliefNode(c);
 		v.setCPF(vnew_cpf);
 		
